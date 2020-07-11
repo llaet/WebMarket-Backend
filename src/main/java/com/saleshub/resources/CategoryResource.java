@@ -1,25 +1,25 @@
 package com.saleshub.resources;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.saleshub.domain.Category;
+import com.saleshub.services.CategoryService;
 
 @RestController
 @RequestMapping("/categorias")
 public class CategoryResource {
 	
-	@GetMapping
-	public List<Category> findAll(){
-		List<Category> categoryList = new ArrayList<>();
-		
-		categoryList.add(new Category(1,"Informática"));
-		categoryList.add(new Category(2,"Escritório"));
-		
-		return categoryList;
+	@Autowired
+	private CategoryService service;
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Category> findById(@PathVariable("id") Integer id){		
+		return ResponseEntity.ok(this.service.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Id não encontrado.")));
 	}
 }
