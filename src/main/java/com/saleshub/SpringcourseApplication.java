@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.saleshub.domain.Address;
 import com.saleshub.domain.Category;
 import com.saleshub.domain.City;
+import com.saleshub.domain.Customer;
 import com.saleshub.domain.Product;
 import com.saleshub.domain.State;
+import com.saleshub.domain.enums.ClientType;
+import com.saleshub.repositories.AddressRepository;
 import com.saleshub.repositories.CategoryRepository;
 import com.saleshub.repositories.CityRepository;
+import com.saleshub.repositories.CustomerRepository;
 import com.saleshub.repositories.ProductRepository;
 import com.saleshub.repositories.StateRepository;
 
@@ -27,6 +32,10 @@ public class SpringcourseApplication implements CommandLineRunner {
 	private StateRepository stateRepository;
 	@Autowired
 	private CityRepository cityRepository;
+	@Autowired
+	private AddressRepository addressRepository;
+	@Autowired
+	private CustomerRepository customerRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringcourseApplication.class, args);
@@ -64,6 +73,20 @@ public class SpringcourseApplication implements CommandLineRunner {
 		
 		this.stateRepository.saveAll(Arrays.asList(state1,state2));
 		this.cityRepository.saveAll(Arrays.asList(city1,city2,city3));
+		
+		Customer customer1 = new Customer(null,"Maria Silva","maria@maria.com", "91985219978",
+				ClientType.PESSOA_FISICA);
+		customer1.getPhones().addAll(Arrays.asList("91985219978","91985277978"));
+		
+		Address address = new Address(null,"Rua Flores","300","Apto 303","Jardim","38220834",
+				customer1,city1);
+		Address address2 = new Address(null,"Avenida Matos","105","sala 800","Centro","38220777",
+				customer1,city2);
+		
+		customer1.getAddresses().addAll(Arrays.asList(address,address2));
+		
+		this.customerRepository.save(customer1);
+		this.addressRepository.saveAll(Arrays.asList(address,address2));
 	}
 
 }
