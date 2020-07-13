@@ -18,8 +18,7 @@ public class CategoryResource {
 	private CategoryService service;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Category> findById(@PathVariable("id") Integer id){		
-		return ResponseEntity.ok(this.service.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Id não encontrado.")));
+	public ResponseEntity<Category> findById(@PathVariable("id") Integer id){
+		return ResponseEntity.ok(this.service.findById(id));
 	}
 }
