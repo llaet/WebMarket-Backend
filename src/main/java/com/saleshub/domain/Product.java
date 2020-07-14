@@ -2,7 +2,10 @@ package com.saleshub.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -33,6 +37,9 @@ public class Product implements Serializable {
 		joinColumns = @JoinColumn(name = "product_id"),
 		inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private List<Category> categories = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderedItem> items = new HashSet<>();
 
 	public Product(Integer id, String name, Double price) {
 		super();
@@ -73,6 +80,19 @@ public class Product implements Serializable {
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	public Set<OrderedItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<OrderedItem> items) {
+		this.items = items;
+	}
+	
+	public List<SaleOrder> getSaleOrder() {
+		return items.stream().map(OrderedItem::getSaleOrder)
+				.collect(Collectors.toList());
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import com.saleshub.domain.Category;
 import com.saleshub.domain.City;
 import com.saleshub.domain.CreditCardPayment;
 import com.saleshub.domain.Customer;
+import com.saleshub.domain.OrderedItem;
 import com.saleshub.domain.Payment;
 import com.saleshub.domain.Product;
 import com.saleshub.domain.SaleOrder;
@@ -24,6 +25,7 @@ import com.saleshub.repositories.AddressRepository;
 import com.saleshub.repositories.CategoryRepository;
 import com.saleshub.repositories.CityRepository;
 import com.saleshub.repositories.CustomerRepository;
+import com.saleshub.repositories.OrderedItemRepository;
 import com.saleshub.repositories.PaymentRepository;
 import com.saleshub.repositories.ProductRepository;
 import com.saleshub.repositories.SaleOrderRepository;
@@ -48,6 +50,8 @@ public class SpringcourseApplication implements CommandLineRunner {
 	private PaymentRepository paymentRepository;
 	@Autowired
 	private SaleOrderRepository saleOrderRepository;
+	@Autowired
+	private OrderedItemRepository orderedItemRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringcourseApplication.class, args);
@@ -115,6 +119,19 @@ public class SpringcourseApplication implements CommandLineRunner {
 		
 		this.saleOrderRepository.saveAll(Arrays.asList(order1,order2));
 		this.paymentRepository.saveAll(Arrays.asList(payment1,payment2));
+		
+		OrderedItem orderedItem1 = new OrderedItem(order1,product1,0.00,1,2000.00);
+		OrderedItem orderedItem2 = new OrderedItem(order1,product3,0.00,2,80.00);
+		OrderedItem orderedItem3 = new OrderedItem(order2,product2,100.00,1,800.00);
+		
+		order1.getItems().addAll(Arrays.asList(orderedItem1,orderedItem2));
+		order2.getItems().add(orderedItem3);
+		
+		product1.getItems().add(orderedItem1);
+		product2.getItems().add(orderedItem3);
+		product3.getItems().add(orderedItem2);
+		
+		this.orderedItemRepository.saveAll(Arrays.asList(orderedItem1,orderedItem2,orderedItem3));
 	}
 
 }
