@@ -9,14 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.saleshub.services.exceptions.CategoryNotFoundException;
+import com.saleshub.services.exceptions.ObjectNotFoundException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
-	@ExceptionHandler(CategoryNotFoundException.class)
+	@ExceptionHandler(ObjectNotFoundException.class)
 	public ResponseEntity<ErrorMessageConstructor> CategoryNotFound(
-			CategoryNotFoundException ex,
+			ObjectNotFoundException ex,
 			HttpServletRequest request){
 		
 		ErrorMessageConstructor error = new ErrorMessageConstructor(

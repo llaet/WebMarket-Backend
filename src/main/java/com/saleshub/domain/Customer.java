@@ -13,11 +13,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.saleshub.domain.enums.ClientType;
 
-@Table
 @Entity(name = "customer")
 public class Customer implements Serializable {
 
@@ -32,12 +31,16 @@ public class Customer implements Serializable {
 	private String document;
 	private Integer type;
 	
-	@OneToMany(mappedBy = "customer")
+	@JsonManagedReference
+	@OneToMany(mappedBy ="customer")
 	private List<Address> addresses = new ArrayList<>();
 	
 	@ElementCollection
 	@CollectionTable(name = "phone_number")
 	private Set<String> phones = new HashSet<>();
+	
+	@OneToMany(mappedBy ="customer")
+	private List<SaleOrder> orders = new ArrayList<>();
 
 	public Customer() {}
 	
@@ -104,6 +107,14 @@ public class Customer implements Serializable {
 
 	public void setPhones(Set<String> phones) {
 		this.phones = phones;
+	}
+	
+	public List<SaleOrder> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<SaleOrder> orders) {
+		this.orders = orders;
 	}
 
 	@Override

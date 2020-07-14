@@ -1,5 +1,6 @@
 package com.saleshub;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +9,24 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.saleshub.domain.Address;
+import com.saleshub.domain.BankSlipPayment;
 import com.saleshub.domain.Category;
 import com.saleshub.domain.City;
+import com.saleshub.domain.CreditCardPayment;
 import com.saleshub.domain.Customer;
+import com.saleshub.domain.Payment;
 import com.saleshub.domain.Product;
+import com.saleshub.domain.SaleOrder;
 import com.saleshub.domain.State;
 import com.saleshub.domain.enums.ClientType;
+import com.saleshub.domain.enums.PaymentStatus;
 import com.saleshub.repositories.AddressRepository;
 import com.saleshub.repositories.CategoryRepository;
 import com.saleshub.repositories.CityRepository;
 import com.saleshub.repositories.CustomerRepository;
+import com.saleshub.repositories.PaymentRepository;
 import com.saleshub.repositories.ProductRepository;
+import com.saleshub.repositories.SaleOrderRepository;
 import com.saleshub.repositories.StateRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class SpringcourseApplication implements CommandLineRunner {
 	private AddressRepository addressRepository;
 	@Autowired
 	private CustomerRepository customerRepository;
+	@Autowired
+	private PaymentRepository paymentRepository;
+	@Autowired
+	private SaleOrderRepository saleOrderRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringcourseApplication.class, args);
@@ -87,6 +99,22 @@ public class SpringcourseApplication implements CommandLineRunner {
 		
 		this.customerRepository.save(customer1);
 		this.addressRepository.saveAll(Arrays.asList(address,address2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		SaleOrder order1 = new SaleOrder(null, sdf.parse("30/09/2019 23:58"),customer1,address);
+		SaleOrder order2 = new SaleOrder(null, sdf.parse("15/04/2020 12:31"),customer1,address2);
+		
+		Payment payment1 = new CreditCardPayment(null,PaymentStatus.QUITADO,order1,6);
+		order1.setPayment(payment1);
+		Payment payment2 = new BankSlipPayment(null,PaymentStatus.PENDENTE,order2,
+				sdf.parse("20/04/2020 00:00"),null);
+		order2.setPayment(payment2);
+		
+		customer1.getOrders().addAll(Arrays.asList(order1,order2));
+		
+		this.saleOrderRepository.saveAll(Arrays.asList(order1,order2));
+		this.paymentRepository.saveAll(Arrays.asList(payment1,payment2));
 	}
 
 }

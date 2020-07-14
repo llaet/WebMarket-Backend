@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.saleshub.domain.Category;
 import com.saleshub.repositories.CategoryRepository;
-import com.saleshub.services.exceptions.CategoryNotFoundException;
+import com.saleshub.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoryService {
@@ -15,6 +15,6 @@ public class CategoryService {
 	
 	public Category findById(Integer id) {
 		return this.repository.findById(id)
-				.orElseThrow(() -> new CategoryNotFoundException("Categoria não encontrada. Id: " + id));
+				.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada. Id: " + id));
 	}
 }

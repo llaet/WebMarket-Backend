@@ -3,9 +3,9 @@ package com.saleshub.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.saleshub.domain.State;
+import com.saleshub.domain.Payment;
 
 @Repository
-public interface StateRepository extends JpaRepository<State, Integer>{
+public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
 }
