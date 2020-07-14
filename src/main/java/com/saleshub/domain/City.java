@@ -10,8 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Table
 @Entity(name = "city")
 public class City implements Serializable {
@@ -24,7 +22,6 @@ public class City implements Serializable {
 	private String name;
 	
 	@ManyToOne
-	@JsonManagedReference
 	@JoinColumn(name = "state_id")
 	private State state;
 	

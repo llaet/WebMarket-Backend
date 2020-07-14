@@ -20,7 +20,8 @@ public class ResourceExceptionHandler {
 			HttpServletRequest request){
 		
 		ErrorMessageConstructor error = new ErrorMessageConstructor(
-				HttpStatus.NOT_FOUND.value(), ex.getMessage(), LocalDateTime.now());
+				HttpStatus.NOT_FOUND.value(), ex.getMessage(), 
+				LocalDateTime.now());
 		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 		

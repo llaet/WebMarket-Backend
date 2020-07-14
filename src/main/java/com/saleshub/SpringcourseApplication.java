@@ -2,6 +2,7 @@ package com.saleshub;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -105,6 +106,7 @@ public class SpringcourseApplication implements CommandLineRunner {
 		this.addressRepository.saveAll(Arrays.asList(address,address2));
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTF"));
 		
 		SaleOrder order1 = new SaleOrder(null, sdf.parse("30/09/2019 23:58"),customer1,address);
 		SaleOrder order2 = new SaleOrder(null, sdf.parse("15/04/2020 12:31"),customer1,address2);
