@@ -17,4 +17,9 @@ public class CategoryService {
 		return this.repository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada. Id: " + id));
 	}
+	
+	public Category create(Category category) {
+		category.setId(null);
+		return this.repository.saveAndFlush(category);
+	}
 }
