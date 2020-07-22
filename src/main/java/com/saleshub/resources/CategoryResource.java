@@ -1,6 +1,8 @@
 package com.saleshub.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.saleshub.domain.Category;
+import com.saleshub.domain.dto.CategoryDTO;
 import com.saleshub.services.CategoryService;
 
 @RestController
@@ -48,5 +51,15 @@ public class CategoryResource {
 	@GetMapping("/{id}")
 	public ResponseEntity<Category> findById(@PathVariable("id") Integer id){
 		return ResponseEntity.ok(this.service.findById(id));
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<CategoryDTO>> findAll(){
+		
+		List<CategoryDTO> categoriesDTO = this.service.findAll().stream()
+			.map(category -> new CategoryDTO(category))
+			.collect(Collectors.toList());
+		
+		return ResponseEntity.ok(categoriesDTO);
 	}
 }

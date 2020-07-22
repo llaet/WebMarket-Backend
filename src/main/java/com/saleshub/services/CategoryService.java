@@ -1,13 +1,15 @@
 package com.saleshub.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.saleshub.domain.Category;
 import com.saleshub.repositories.CategoryRepository;
-import com.saleshub.services.exceptions.ObjectNotFoundException;
 import com.saleshub.services.exceptions.DataIntegrityException;
+import com.saleshub.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoryService {
@@ -38,5 +40,9 @@ public class CategoryService {
 			throw new DataIntegrityException("Não é possível excluir uma categoria com produtos "
 					+ "vinculados.");
 		}
+	}
+
+	public List<Category> findAll() {
+		return this.repository.findAll();
 	}
 }
