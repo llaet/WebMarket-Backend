@@ -13,13 +13,18 @@ public class CategoryService {
 	@Autowired
 	private CategoryRepository repository;
 	
-	public Category findById(Integer id) {
-		return this.repository.findById(id)
-				.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada. Id: " + id));
-	}
-	
 	public Category create(Category category) {
 		category.setId(null);
 		return this.repository.saveAndFlush(category);
+	}
+
+	public Category update(Category category, Integer id) {
+		findById(id);
+		return this.repository.saveAndFlush(category);
+	}
+	
+	public Category findById(Integer id) {
+		return this.repository.findById(id)
+				.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada. Id: " + id));
 	}
 }
