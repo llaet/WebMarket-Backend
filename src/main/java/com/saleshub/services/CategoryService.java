@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.saleshub.domain.Category;
+import com.saleshub.domain.dto.CategoryDTO;
 import com.saleshub.repositories.CategoryRepository;
 import com.saleshub.services.exceptions.DataIntegrityException;
 import com.saleshub.services.exceptions.ObjectNotFoundException;
@@ -54,5 +55,9 @@ public class CategoryService {
 				.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		
 		return this.repository.findAll(pageRequest);
+	}
+	
+	public Category toCategory(CategoryDTO categoryDTO) {
+		return new Category(categoryDTO.getId(), categoryDTO.getName());
 	}
 }
