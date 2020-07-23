@@ -13,8 +13,8 @@ public class CategoryDTO implements Serializable {
 	
 	private Integer id;
 	
-	@NotEmpty
-	@Size(min = 5, max = 80)
+	@NotEmpty(message = "O campo nome não deve estar vazio")
+	@Size(min = 5, max = 80, message = "O tamanho deve ser entre 5 e 80")
 	private String name;
 	
 	public CategoryDTO() {}

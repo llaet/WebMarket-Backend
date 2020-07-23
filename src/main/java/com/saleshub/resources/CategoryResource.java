@@ -32,7 +32,8 @@ public class CategoryResource {
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdCategory.getId()).toUri();
-			return ResponseEntity.created(uri).build();	
+		
+		return ResponseEntity.created(uri).build();	
 	}
 	
 	@PutMapping("/{id}")
