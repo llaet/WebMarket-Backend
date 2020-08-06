@@ -50,7 +50,7 @@ public class Customer implements Serializable {
 		this.name = name;
 		this.email = email;
 		this.document = document;
-		this.type = type.getClientNumber();
+		this.type = type == null ? null : type.getClientNumber();
 	}
 
 	public Integer getId() {
