@@ -40,8 +40,8 @@ public class CustomerService {
 		try {
 			this.repository.deleteById(id);
 		} catch(DataIntegrityViolationException ex) {
-			throw new DataIntegrityException("Não é possível excluir um cliente com produtos "
-					+ "vinculados.");
+			throw new DataIntegrityException("Não é possível excluir um cliente com pedidos "
+					+ "em andamento.");
 		}
 	}
 	

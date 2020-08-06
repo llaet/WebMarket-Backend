@@ -27,7 +27,11 @@ public class CategoryService {
 	}
 
 	public Category update(Category category, Integer id) {
+		
 		findById(id);
+		
+		category.setId(id);
+		
 		return this.repository.saveAndFlush(category);
 	}
 	
