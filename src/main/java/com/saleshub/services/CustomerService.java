@@ -9,8 +9,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.saleshub.domain.Address;
+import com.saleshub.domain.City;
 import com.saleshub.domain.Customer;
 import com.saleshub.domain.dto.CustomerDTO;
+import com.saleshub.domain.dto.CustomerNewDTO;
+import com.saleshub.domain.enums.ClientType;
 import com.saleshub.repositories.CustomerRepository;
 import com.saleshub.services.exceptions.DataIntegrityException;
 import com.saleshub.services.exceptions.ObjectNotFoundException;
@@ -64,5 +68,24 @@ public class CustomerService {
 	public Customer toCustomer(CustomerDTO customerDTO) {
 		return new Customer(customerDTO.getId(), customerDTO.getName(),
 				customerDTO.getEmail(),null,null);
+	}
+	
+	public Customer toCustomer(CustomerNewDTO customerNewDTO) {
+		
+		Customer customer = new Customer(null,customerNewDTO.getName(),customerNewDTO.getEmail(),
+				customerNewDTO.getDocument(),ClientType.toEnum(customerNewDTO.getType()));
+		
+		City city = new City(customerNewDTO.getCityId(),null,null);
+		
+		Address address = new Address(null,customerNewDTO.getPublicPlace(),customerNewDTO.getNumber(),
+				customerNewDTO.getComplement(),customerNewDTO.getNeighborhood(),
+				customerNewDTO.getZipCode(),customer,city);
+		
+		customer.getAddresses().add(address);
+		customer.getPhones().add(customerNewDTO.getPhone1());
+		customer.getPhones().add(customerNewDTO.getPhone2());
+		customer.getPhones().add(customerNewDTO.getPhone3());
+		
+		return customer;
 	}
 }

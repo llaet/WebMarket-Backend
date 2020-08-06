@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.saleshub.domain.Customer;
 import com.saleshub.domain.dto.CustomerDTO;
+import com.saleshub.domain.dto.CustomerNewDTO;
 import com.saleshub.services.CustomerService;
 
 @RestController
@@ -32,9 +33,9 @@ public class CustomerResource {
 	private CustomerService service;
 
 	@PostMapping
-	public ResponseEntity<Void> create(@Valid @RequestBody CustomerDTO customerDTO){
+	public ResponseEntity<Void> create(@Valid @RequestBody CustomerNewDTO customerNewDTO){
 		
-		Customer createdCustomer = service.toCustomer(customerDTO);
+		Customer createdCustomer = service.toCustomer(customerNewDTO);
 		
 		createdCustomer = this.service.create(createdCustomer);
 		
