@@ -32,7 +32,7 @@ public class Customer implements Serializable {
 	private String document;
 	private Integer type;
 	
-	@OneToMany(mappedBy ="customer", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy ="customer", cascade = CascadeType.ALL)
 	private List<Address> addresses = new ArrayList<>();
 	
 	@ElementCollection
