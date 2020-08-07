@@ -2,21 +2,37 @@ package com.saleshub.domain.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+import com.saleshub.services.validation.CustomerInsert;
+
+@CustomerInsert
 public class CustomerNewDTO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	@NotEmpty(message = "O campo nome não deve estar vazio")
+	@Size(min = 5, max = 120, message = "O tamanho deve ser entre 5 e 120 caracteres")
 	private String name;
+	@Email(message = "Email inválido")
+	@NotEmpty(message = "O campo email não deve estar vazio")
 	private String email;
+	@NotEmpty(message = "O campo nome não deve estar vazio")
 	private String document;
 	private Integer type;
 	
+	@NotEmpty(message = "O campo nome não deve estar vazio")
 	private String publicPlace;
+	@NotEmpty(message = "O campo nome não deve estar vazio")
 	private String number;
 	private String complement;
 	private String neighborhood;
+	@NotEmpty(message = "O campo nome não deve estar vazio")
 	private String zipCode;
 	
+	@NotEmpty(message = "O campo nome não deve estar vazio")
 	private String phone1;
 	private String phone2;
 	private String phone3;
