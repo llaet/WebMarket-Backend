@@ -39,6 +39,10 @@ public class CategoryService {
 		return this.repository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada. Id: " + id));
 	}
+	
+	public List<Category> findAllById(List<Integer> ids){
+		return this.repository.findAllById(ids);
+	}
 
 	public void deleteById(Integer id) {
 		findById(id);
