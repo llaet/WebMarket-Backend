@@ -74,9 +74,17 @@ public class OrderedItem implements Serializable {
 	public SaleOrder getSaleOrder() {
 		return id.getSaleOrder();
 	}
+	
+	public void setSaleOrder(SaleOrder order) {
+		id.setOrder(order);
+	}
 
 	public Product getProduct() {
 		return id.getProduct();
+	}
+	
+	public void setProduct(Product product) {
+		id.setProduct(product);
 	}
 
 	@Override
