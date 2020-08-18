@@ -22,13 +22,20 @@ public class OrderedItem implements Serializable {
 	
 	public OrderedItem() {}
 	
-	public OrderedItem(SaleOrder order, Product product, Double discount, Integer quantity, Double price) {
+	public OrderedItem(SaleOrder order, Product product, 
+			Double discount, Integer quantity, Double price) {
 		super();
 		id.setOrder(order);
 		id.setProduct(product);
 		this.discount = discount;
 		this.quantity = quantity;
 		this.price = price;
+	}
+	
+	
+	
+	public Double getSubTotal() {
+		return (price - discount) * quantity;
 	}
 
 	public OrderedItemPK getId() {
