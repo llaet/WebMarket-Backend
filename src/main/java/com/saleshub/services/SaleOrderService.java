@@ -30,6 +30,8 @@ public class SaleOrderService {
 	private ProductService productService;
 	@Autowired
 	private OrderedItemService orderedItemService;
+	@Autowired
+	private CustomerService customerService;
 	
 	public SaleOrder findById(Integer id) {
 		return this.repository.findById(id)
@@ -39,17 +41,8 @@ public class SaleOrderService {
 	public SaleOrder create(SaleOrder saleOrder) {
 		
 		saleOrder.setId(null);
-		
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			sdf.setTimeZone(TimeZone.getTimeZone("UTF"));
-			
-			String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-			saleOrder.setOrderedAt(sdf.parse(date));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
+		saleOrder.setOrderedAt(new Date());
+		saleOrder.setCustomer(this.customerService.findById(saleOrder.getCustomer().getId()));
 		saleOrder.getPayment().setPaymentStatus(PaymentStatus.PENDENTE);
 		saleOrder.getPayment().setSaleOrder(saleOrder);
 		
@@ -60,17 +53,18 @@ public class SaleOrderService {
 			this.paymentService.fillOutBankSlipPayment(payment, saleOrder.getOrderedAt());
 		}
 		
-		this.repository.saveAndFlush(saleOrder);
+		SaleOrder createdOrder = this.repository.saveAndFlush(saleOrder);
 		
 		this.paymentService.create(saleOrder.getPayment());
 		
 		for(OrderedItem order : saleOrder.getItems()) {
 			order.setDiscount(0.0);
-			order.setPrice(this.productService.findById(order.getProduct().getId()).getPrice());
+			order.setProduct(this.productService.findById(order.getProduct().getId()));
+			order.setPrice(order.getProduct().getPrice());
 			order.setSaleOrder(saleOrder);
 		}
 		this.orderedItemService.saveAll(saleOrder.getItems());
-		
+		System.out.println(createdOrder);
 		return saleOrder;		
 	}
 }

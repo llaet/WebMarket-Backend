@@ -1,6 +1,8 @@
 package com.saleshub.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -31,8 +33,6 @@ public class OrderedItem implements Serializable {
 		this.quantity = quantity;
 		this.price = price;
 	}
-	
-	
 	
 	public Double getSubTotal() {
 		return (price - discount) * quantity;
@@ -112,4 +112,15 @@ public class OrderedItem implements Serializable {
 		return true;
 	}
 
+    @Override
+    public String toString() {
+        NumberFormat numberFormat = NumberFormat
+                .getCurrencyInstance(new Locale("pt","BR"));
+        final StringBuffer sb = new StringBuffer();
+        sb.append("\nproduto: ").append(getProduct().getName());
+        sb.append(", quantidade: ").append(quantity);
+        sb.append(", preço unitário: ").append(numberFormat.format(price));
+        sb.append(", subtotal: ").append(numberFormat.format(getSubTotal()));
+        return sb.toString();
+    }
 }

@@ -1,8 +1,11 @@
 package com.saleshub.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -134,5 +137,21 @@ public class SaleOrder implements Serializable {
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		NumberFormat numberFormat = NumberFormat
+				.getCurrencyInstance(new Locale("pt","BR"));
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		final StringBuffer sb = new StringBuffer();
+		sb.append("número do pedido: ").append(id);
+		sb.append(", realizado em: ").append(dateFormat.format(orderedAt));
+		sb.append(", cliente: ").append(getCustomer().getName());
+		sb.append(", situação do pagamento: ")
+				.append(getPayment().getPaymentStatus().getPaymentDescription());
+		sb.append("\ndetalhes:");
+		getItems().forEach(item -> sb.append(item.toString()));
+		sb.append("\nvalor total: ").append(numberFormat.format(getTotalValue()));
+		return sb.toString();
+	}
 }
