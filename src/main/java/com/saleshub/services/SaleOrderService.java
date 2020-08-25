@@ -1,13 +1,6 @@
 package com.saleshub.services;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +46,7 @@ public class SaleOrderService {
 			this.paymentService.fillOutBankSlipPayment(payment, saleOrder.getOrderedAt());
 		}
 		
-		SaleOrder createdOrder = this.repository.saveAndFlush(saleOrder);
+		this.repository.saveAndFlush(saleOrder);
 		
 		this.paymentService.create(saleOrder.getPayment());
 		
@@ -64,7 +57,7 @@ public class SaleOrderService {
 			order.setSaleOrder(saleOrder);
 		}
 		this.orderedItemService.saveAll(saleOrder.getItems());
-		System.out.println(createdOrder);
+
 		return saleOrder;		
 	}
 }
