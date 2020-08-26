@@ -25,6 +25,8 @@ public class SaleOrderService {
 	private OrderedItemService orderedItemService;
 	@Autowired
 	private CustomerService customerService;
+	@Autowired
+	private EmailService emailService;
 	
 	public SaleOrder findById(Integer id) {
 		return this.repository.findById(id)
@@ -57,6 +59,8 @@ public class SaleOrderService {
 			order.setSaleOrder(saleOrder);
 		}
 		this.orderedItemService.saveAll(saleOrder.getItems());
+
+		this.emailService.sendOrderConfirmationEmail(saleOrder);
 
 		return saleOrder;		
 	}
