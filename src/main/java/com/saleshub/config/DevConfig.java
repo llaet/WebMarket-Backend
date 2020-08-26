@@ -1,5 +1,7 @@
 package com.saleshub.config;
 
+import com.saleshub.services.EmailService;
+import com.saleshub.services.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,5 +30,10 @@ public class DevConfig {
 		this.dbService.instantiateDatabase();
 		
 		return true;
+	}
+
+	@Bean
+	public EmailService getEmailService(){
+		return new SmtpEmailService();
 	}
 }
