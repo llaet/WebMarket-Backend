@@ -60,7 +60,7 @@ public class SaleOrderService {
 		}
 		this.orderedItemService.saveAll(saleOrder.getItems());
 
-		this.emailService.sendOrderConfirmationEmail(saleOrder);
+		this.emailService.sendOrderConfirmationHtmlEmail(saleOrder);
 
 		return saleOrder;		
 	}
