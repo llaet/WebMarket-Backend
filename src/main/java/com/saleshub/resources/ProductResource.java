@@ -30,8 +30,8 @@ public class ProductResource {
 	
 	@GetMapping
 	public ResponseEntity<Page<ProductDTO>> findAllWithPageInfo(
-			@RequestParam(value="name", defaultValue = "") String name, 
-			@RequestParam(value="categories", defaultValue = "") String categories, 
+			@RequestParam(value="nome", defaultValue = "") String name,
+			@RequestParam(value="categorias", defaultValue = "") String categories,
 			@RequestParam(value="page", defaultValue = "0") Integer page, 
 			@RequestParam(value="linesPerPage", defaultValue = "24") Integer linesPerPage, 
 			@RequestParam(value="orderBy", defaultValue = "name") String orderBy, 
