@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.saleshub.domain.Address;
@@ -24,6 +25,8 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerRepository repository;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	public Customer create(Customer customer) {
 		customer.setId(null);
@@ -67,13 +70,14 @@ public class CustomerService {
 	
 	public Customer toCustomer(CustomerDTO customerDTO) {
 		return new Customer(customerDTO.getId(), customerDTO.getName(),
-				customerDTO.getEmail(),null,null);
+				customerDTO.getEmail(),null,null,null);
 	}
 	
 	public Customer toCustomer(CustomerNewDTO customerNewDTO) {
 		
 		Customer customer = new Customer(null,customerNewDTO.getName(),customerNewDTO.getEmail(),
-				customerNewDTO.getDocument(),ClientType.toEnum(customerNewDTO.getType()));
+				customerNewDTO.getDocument(),ClientType.toEnum(customerNewDTO.getType()),
+				this.passwordEncoder.encode(customerNewDTO.getPassword()));
 		
 		City city = new City(customerNewDTO.getCityId(),null,null);
 		

@@ -6,8 +6,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.br.CNPJ;
+import com.saleshub.services.validation.CustomerInsert;
 
+@CustomerInsert
 public class CustomerNewDTO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -18,11 +19,14 @@ public class CustomerNewDTO implements Serializable {
 	@Email(message = "Email inválido")
 	@NotEmpty(message = "O campo email não deve estar vazio")
 	private String email;
-	@CNPJ
+
 	@NotEmpty(message = "O campo documento não deve estar vazio")
 	private String document;
 	private Integer type;
-	
+
+	@NotEmpty(message = "O campo senha não deve estar vazio")
+	private String password;
+
 	@NotEmpty(message = "O campo logradouro não deve estar vazio")
 	private String publicPlace;
 	@NotEmpty(message = "O campo número não deve estar vazio")
@@ -71,6 +75,14 @@ public class CustomerNewDTO implements Serializable {
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getPublicPlace() {

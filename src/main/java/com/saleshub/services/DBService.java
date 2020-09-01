@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.saleshub.domain.Address;
@@ -51,6 +52,8 @@ public class DBService {
 	private SaleOrderRepository saleOrderRepository;
 	@Autowired
 	private OrderedItemRepository orderedItemRepository;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	public void instantiateDatabase() throws Exception {
 
@@ -114,8 +117,8 @@ public class DBService {
 			this.stateRepository.saveAll(Arrays.asList(state1,state2));
 			this.cityRepository.saveAll(Arrays.asList(city1,city2,city3));
 			
-			Customer customer1 = new Customer(null,"Maria Silva","lucas.laetlira28@gmail.com", "91985219978",
-					ClientType.PESSOA_FISICA);
+			Customer customer1 = new Customer(null,"Maria Silva","yourTestMail", "91985219978",
+					ClientType.PESSOA_FISICA, this.passwordEncoder.encode("teste123"));
 			customer1.getPhones().addAll(Arrays.asList("91985219978","91985277978"));
 			
 			Address address = new Address(null,"Rua Flores","300","Apto 303","Jardim","38220834",
