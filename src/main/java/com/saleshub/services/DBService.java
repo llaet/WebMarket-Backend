@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.TimeZone;
 
+import com.saleshub.domain.enums.CustomerProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -117,27 +118,43 @@ public class DBService {
 			this.stateRepository.saveAll(Arrays.asList(state1,state2));
 			this.cityRepository.saveAll(Arrays.asList(city1,city2,city3));
 			
-			Customer customer1 = new Customer(null,"Maria Silva","yourTestMail", "91985219978",
+			Customer customer1 = new Customer(null,"Maria Silva","yourTestMail",
+					"05458216067",
 					ClientType.PESSOA_FISICA, this.passwordEncoder.encode("teste123"));
 			customer1.getPhones().addAll(Arrays.asList("91985219978","91985277978"));
+
+		Customer customer2 = new Customer(null,"José Silva","yourTestMail2",
+				"19064760047", ClientType.PESSOA_FISICA,
+				this.passwordEncoder.encode("12345"));
+		customer2.getPhones().add("91985216578");
+		customer2.addProfile(CustomerProfile.ADMIN);
 			
-			Address address = new Address(null,"Rua Flores","300","Apto 303","Jardim","38220834",
+			Address address = new Address(null,"Rua Flores","300","Apto 303",
+					"Jardim","38220834",
 					customer1,city1);
-			Address address2 = new Address(null,"Avenida Matos","105","sala 800","Centro","38220777",
+			Address address2 = new Address(null,"Avenida Matos","105",
+					"sala 800", "Centro","38220777",
 					customer1,city2);
+		Address address3 = new Address(null,"Alameda Alvaro Rocco","121",
+				"Apto 24", "Cidade Industrial","38227721",
+				customer2,city3);
 			
 			customer1.getAddresses().addAll(Arrays.asList(address,address2));
+			customer2.getAddresses().addAll(Arrays.asList(address3));
 			
-			this.customerRepository.save(customer1);
-			this.addressRepository.saveAll(Arrays.asList(address,address2));
+			this.customerRepository.saveAll(Arrays.asList(customer1,customer2));
+			this.addressRepository.saveAll(Arrays.asList(address,address2,address3));
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 			sdf.setTimeZone(TimeZone.getTimeZone("UTF"));
 			
-			SaleOrder order1 = new SaleOrder(null, sdf.parse("30/09/2019 23:58"),customer1,address);
-			SaleOrder order2 = new SaleOrder(null, sdf.parse("15/04/2020 12:31"),customer1,address2);
+			SaleOrder order1 = new SaleOrder(null, sdf.parse("30/09/2019 23:58"),
+					customer1,address);
+			SaleOrder order2 = new SaleOrder(null, sdf.parse("15/04/2020 12:31"),
+					customer1,address2);
 			
-			Payment payment1 = new CreditCardPayment(null,PaymentStatus.QUITADO,order1,6);
+			Payment payment1 = new CreditCardPayment(null,PaymentStatus.QUITADO,order1,
+					6);
 			order1.setPayment(payment1);
 			Payment payment2 = new BankSlipPayment(null,PaymentStatus.PENDENTE,order2,
 					sdf.parse("20/04/2020 00:00"),null);
@@ -148,9 +165,12 @@ public class DBService {
 			this.saleOrderRepository.saveAll(Arrays.asList(order1,order2));
 			this.paymentRepository.saveAll(Arrays.asList(payment1,payment2));
 			
-			OrderedItem orderedItem1 = new OrderedItem(order1,product1,0.00,1,2000.00);
-			OrderedItem orderedItem2 = new OrderedItem(order1,product3,0.00,2,80.00);
-			OrderedItem orderedItem3 = new OrderedItem(order2,product2,100.00,1,800.00);
+			OrderedItem orderedItem1 = new OrderedItem(order1,product1,0.00,1,
+					2000.00);
+			OrderedItem orderedItem2 = new OrderedItem(order1,product3,0.00,2,
+					80.00);
+			OrderedItem orderedItem3 = new OrderedItem(order2,product2,100.00,1,
+					800.00);
 			
 			order1.getItems().addAll(Arrays.asList(orderedItem1,orderedItem2));
 			order2.getItems().add(orderedItem3);

@@ -5,19 +5,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.saleshub.domain.enums.ClientType;
+import com.saleshub.domain.enums.CustomerProfile;
 
 @Entity(name = "customer")
 public class Customer implements Serializable {
@@ -47,7 +41,13 @@ public class Customer implements Serializable {
 	@OneToMany(mappedBy ="customer")
 	private List<SaleOrder> orders = new ArrayList<>();
 
-	public Customer() {}
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "customer_profiles")
+	private Set<Integer> profiles = new HashSet<>();
+
+	public Customer() {
+		addProfile(CustomerProfile.CLIENTE);
+	}
 	
 	public Customer(Integer id, String name, String email, String document, ClientType type,
 					String password) {
@@ -58,14 +58,7 @@ public class Customer implements Serializable {
 		this.document = document;
 		this.type = type == null ? null : type.getClientNumber();
 		this.password = password;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
+		addProfile(CustomerProfile.CLIENTE);
 	}
 
 	public Integer getId() {
@@ -106,6 +99,24 @@ public class Customer implements Serializable {
 
 	public void setType(ClientType type) {
 		this.type = type.getClientNumber();
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Set<CustomerProfile> getCustomerProfiles(){
+		return profiles.stream()
+				.map(profile -> CustomerProfile.toEnum(profile))
+				.collect(Collectors.toSet());
+	}
+
+	public void addProfile(CustomerProfile customerProfile){
+		profiles.add(customerProfile.getRoleCode());
 	}
 
 	public List<Address> getAddresses() {
