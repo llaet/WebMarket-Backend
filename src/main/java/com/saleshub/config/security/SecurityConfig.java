@@ -52,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         httpSecurity.addFilter(new JWTAuthenticationFilter(this.jwtUtil,authenticationManager()));
+        httpSecurity.addFilter(new JWTAuthorizationFilter(authenticationManager(),
+                this.jwtUtil,this.userDetailsService));
 
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
