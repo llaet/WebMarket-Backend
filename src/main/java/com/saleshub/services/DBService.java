@@ -6,6 +6,7 @@ import java.util.TimeZone;
 
 import com.saleshub.domain.enums.CustomerProfile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -118,12 +119,12 @@ public class DBService {
 			this.stateRepository.saveAll(Arrays.asList(state1,state2));
 			this.cityRepository.saveAll(Arrays.asList(city1,city2,city3));
 			
-			Customer customer1 = new Customer(null,"Maria Silva","yourTestMail",
+			Customer customer1 = new Customer(null,"Maria Silva","maria@maria.com",
 					"05458216067",
 					ClientType.PESSOA_FISICA, this.passwordEncoder.encode("teste123"));
 			customer1.getPhones().addAll(Arrays.asList("91985219978","91985277978"));
 
-		Customer customer2 = new Customer(null,"José Silva","yourTestMail2",
+		Customer customer2 = new Customer(null,"José Silva","jose@jose.com",
 				"19064760047", ClientType.PESSOA_FISICA,
 				this.passwordEncoder.encode("12345"));
 		customer2.getPhones().add("91985216578");

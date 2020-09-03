@@ -1,5 +1,12 @@
 package com.saleshub.domain.enums;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public enum CustomerProfile {
 
     ADMIN(1, "ROLE_ADMIN"),
@@ -33,5 +40,18 @@ public enum CustomerProfile {
         }
 
         throw new IllegalArgumentException("Código de perfil do cliente não existe. Código: " + roleCode);
+    }
+
+    public static Set<GrantedAuthority> toGrantedAuthorities(Collection<CustomerProfile> customerProfiles){
+        if(customerProfiles == null) {
+            return null;
+        }
+
+        Set<GrantedAuthority> authorities =
+                customerProfiles.stream()
+                        .map(profile -> new SimpleGrantedAuthority(profile.getRole()))
+                        .collect(Collectors.toSet());
+
+        return authorities;
     }
 }

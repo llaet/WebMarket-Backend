@@ -2,12 +2,12 @@ package com.saleshub.services;
 
 import java.util.List;
 
+import com.saleshub.config.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.saleshub.domain.Address;
@@ -25,8 +25,6 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerRepository repository;
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
 	
 	public Customer create(Customer customer) {
 		customer.setId(null);
@@ -57,6 +55,10 @@ public class CustomerService {
 				.orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado. Id: " + id));
 	}
 
+	public Customer findByEmail(String email) {
+		return this.repository.findByEmail(email);
+	}
+
 	public List<Customer> findAll() {
 		return this.repository.findAll();
 	}
@@ -77,7 +79,7 @@ public class CustomerService {
 		
 		Customer customer = new Customer(null,customerNewDTO.getName(),customerNewDTO.getEmail(),
 				customerNewDTO.getDocument(),ClientType.toEnum(customerNewDTO.getType()),
-				this.passwordEncoder.encode(customerNewDTO.getPassword()));
+				SecurityConfig.bCryptPasswordEncoder().encode(customerNewDTO.getPassword()));
 		
 		City city = new City(customerNewDTO.getCityId(),null,null);
 		
