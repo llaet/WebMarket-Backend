@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.saleshub.services.exceptions.AuthorizationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -18,35 +19,30 @@ import com.saleshub.services.exceptions.ObjectNotFoundException;
 public class ResourceExceptionHandler {
 
 	@ExceptionHandler(ObjectNotFoundException.class)
-	public ResponseEntity<ErrorMessageConstructor> handleCategoryNotFound(
-			ObjectNotFoundException ex,
-			HttpServletRequest request){
+	public ResponseEntity<ErrorMessageConstructor> handleObjectNotFoundException(
+			ObjectNotFoundException ex){
 		
 		ErrorMessageConstructor error = new ErrorMessageConstructor(
 				HttpStatus.NOT_FOUND.value(), ex.getMessage(), 
 				LocalDateTime.now());
 		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-		
 	}
 	
 	@ExceptionHandler(DataIntegrityException.class)
 	public ResponseEntity<ErrorMessageConstructor> handleDataIntegrityException(
-			DataIntegrityException ex,
-			HttpServletRequest request){
+			DataIntegrityException ex){
 		
 		ErrorMessageConstructor error = new ErrorMessageConstructor(
 				HttpStatus.BAD_REQUEST.value(), ex.getMessage(), 
 				LocalDateTime.now());
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-		
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorMessageConstructor> handleMethodArgumentNotValidException(
-			MethodArgumentNotValidException ex,
-			HttpServletRequest request){
+			MethodArgumentNotValidException ex){
 		
 		ValidationError error = new ValidationError(
 				HttpStatus.BAD_REQUEST.value(), "Erro de validação", 
@@ -57,6 +53,16 @@ public class ResourceExceptionHandler {
 		}
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-		
+	}
+
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<ErrorMessageConstructor> handleAuthorizationException(
+			AuthorizationException ex){
+
+		ErrorMessageConstructor error = new ErrorMessageConstructor(
+				HttpStatus.FORBIDDEN.value(), ex.getMessage(),
+				LocalDateTime.now());
+
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
 	}
 }

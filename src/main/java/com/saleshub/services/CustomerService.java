@@ -3,6 +3,9 @@ package com.saleshub.services;
 import java.util.List;
 
 import com.saleshub.config.security.SecurityConfig;
+import com.saleshub.config.security.UserSpringSecurity;
+import com.saleshub.domain.enums.CustomerProfile;
+import com.saleshub.services.exceptions.AuthorizationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,8 @@ import com.saleshub.domain.enums.ClientType;
 import com.saleshub.repositories.CustomerRepository;
 import com.saleshub.services.exceptions.DataIntegrityException;
 import com.saleshub.services.exceptions.ObjectNotFoundException;
+
+import javax.naming.AuthenticationException;
 
 @Service
 public class CustomerService {
@@ -51,6 +56,15 @@ public class CustomerService {
 	}
 	
 	public Customer findById(Integer id) {
+
+		UserSpringSecurity authenticatedUser = UserService.userAuthenticated();
+
+		if(authenticatedUser == null || !authenticatedUser.hasRole(CustomerProfile.ADMIN)
+		&& !id.equals(authenticatedUser.getId())){
+
+			throw new AuthorizationException("Acesso negado");
+		}
+
 		return this.repository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado. Id: " + id));
 	}
