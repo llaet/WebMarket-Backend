@@ -2,12 +2,15 @@ package com.saleshub.services;
 
 import java.util.Date;
 
+import com.saleshub.config.security.UserSpringSecurity;
+import com.saleshub.domain.*;
+import com.saleshub.services.exceptions.AuthorizationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.saleshub.domain.BankSlipPayment;
-import com.saleshub.domain.OrderedItem;
-import com.saleshub.domain.SaleOrder;
 import com.saleshub.domain.enums.PaymentStatus;
 import com.saleshub.repositories.SaleOrderRepository;
 import com.saleshub.services.exceptions.ObjectNotFoundException;
@@ -29,8 +32,16 @@ public class SaleOrderService {
 	private EmailService emailService;
 	
 	public SaleOrder findById(Integer id) {
-		return this.repository.findById(id)
+
+		Customer customer = getAuthenticatedCustomer();
+
+		SaleOrder saleOrder = this.repository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Pedido não encontrado. Id: " + id));
+
+		if(customer.getOrders().contains(saleOrder)){
+			return saleOrder;
+		}
+		throw new AuthorizationException("Acesso negado");
 	}
 
 	public SaleOrder create(SaleOrder saleOrder) {
@@ -63,5 +74,26 @@ public class SaleOrderService {
 		this.emailService.sendOrderConfirmationHtmlEmail(saleOrder);
 
 		return saleOrder;		
+	}
+
+	public Page<SaleOrder> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+
+		PageRequest pageRequest = PageRequest
+				.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+
+		Customer customer = getAuthenticatedCustomer();
+
+		return this.repository.findByCustomer(customer,pageRequest);
+	}
+
+	private Customer getAuthenticatedCustomer(){
+
+		UserSpringSecurity authenticatedUser = UserService.userAuthenticated();
+
+		if(authenticatedUser == null){
+			throw new AuthorizationException("Acesso negado");
+		}
+
+		return this.customerService.findById(authenticatedUser.getId());
 	}
 }

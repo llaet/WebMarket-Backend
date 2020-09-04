@@ -153,6 +153,8 @@ public class DBService {
 					customer1,address);
 			SaleOrder order2 = new SaleOrder(null, sdf.parse("15/04/2020 12:31"),
 					customer1,address2);
+			SaleOrder order3 = new SaleOrder(null, sdf.parse("04/09/2020 12:00"),
+				customer2,address3);
 			
 			Payment payment1 = new CreditCardPayment(null,PaymentStatus.QUITADO,order1,
 					6);
@@ -160,10 +162,12 @@ public class DBService {
 			Payment payment2 = new BankSlipPayment(null,PaymentStatus.PENDENTE,order2,
 					sdf.parse("20/04/2020 00:00"),null);
 			order2.setPayment(payment2);
+			order3.setPayment(payment1);
 			
 			customer1.getOrders().addAll(Arrays.asList(order1,order2));
+			customer2.getOrders().addAll(Arrays.asList(order3));
 			
-			this.saleOrderRepository.saveAll(Arrays.asList(order1,order2));
+			this.saleOrderRepository.saveAll(Arrays.asList(order1,order2,order3));
 			this.paymentRepository.saveAll(Arrays.asList(payment1,payment2));
 			
 			OrderedItem orderedItem1 = new OrderedItem(order1,product1,0.00,1,
@@ -172,14 +176,19 @@ public class DBService {
 					80.00);
 			OrderedItem orderedItem3 = new OrderedItem(order2,product2,100.00,1,
 					800.00);
+			OrderedItem orderedItem4 = new OrderedItem(order3,product4,100.00,1,
+				1000.00);
 			
 			order1.getItems().addAll(Arrays.asList(orderedItem1,orderedItem2));
 			order2.getItems().add(orderedItem3);
+			order3.getItems().add(orderedItem4);
 			
 			product1.getItems().add(orderedItem1);
 			product2.getItems().add(orderedItem3);
 			product3.getItems().add(orderedItem2);
+			product4.getItems().add(orderedItem4);
 			
-			this.orderedItemRepository.saveAll(Arrays.asList(orderedItem1,orderedItem2,orderedItem3));
+			this.orderedItemRepository.saveAll(
+					Arrays.asList(orderedItem1,orderedItem2,orderedItem3,orderedItem4));
 		}
 }
