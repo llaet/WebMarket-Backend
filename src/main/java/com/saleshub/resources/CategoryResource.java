@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,7 +23,8 @@ public class CategoryResource {
 	
 	@Autowired
 	private CategoryService service;
-	
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity<Void> create(@Valid @RequestBody CategoryDTO categoryDTO){	
 		
@@ -35,7 +37,8 @@ public class CategoryResource {
 		
 		return ResponseEntity.created(uri).build();	
 	}
-	
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoryDTO categoryDTO,
 			@PathVariable("id") Integer id){
@@ -46,7 +49,8 @@ public class CategoryResource {
 		
 		return ResponseEntity.noContent().build();
 	}
-	
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
 		this.service.deleteById(id);
