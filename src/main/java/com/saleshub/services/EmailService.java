@@ -1,5 +1,6 @@
 package com.saleshub.services;
 
+import com.saleshub.domain.Customer;
 import com.saleshub.domain.SaleOrder;
 import org.springframework.mail.SimpleMailMessage;
 
@@ -11,4 +12,5 @@ public interface EmailService {
     void sendOrderConfirmationHtmlEmail(SaleOrder saleOrder);
     void sendEmail(SimpleMailMessage emailMessage);
     void sendHtmlEmail(MimeMessage msg);
+    void sendNewPasswordEmail(Customer customer, String newPassword);
 }

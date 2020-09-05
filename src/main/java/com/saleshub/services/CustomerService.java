@@ -36,6 +36,10 @@ public class CustomerService {
 		return this.repository.saveAndFlush(customer);
 	}
 
+	public void save(Customer customer){
+		this.repository.saveAndFlush(customer);
+	}
+
 	public Customer update(Customer customer, Integer id) {
 		
 		findById(id);

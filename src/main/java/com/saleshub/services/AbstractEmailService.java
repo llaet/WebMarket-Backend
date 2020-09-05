@@ -1,5 +1,6 @@
 package com.saleshub.services;
 
+import com.saleshub.domain.Customer;
 import com.saleshub.domain.SaleOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,5 +74,25 @@ public abstract class AbstractEmailService implements EmailService {
         mimeMessageHelper.setText(getStringSaleOrderHtmlTemplate(saleOrder),true);
 
         return mimeMessage;
+    }
+
+    @Override
+    public void sendNewPasswordEmail(Customer customer, String newPassword){
+
+        SimpleMailMessage smm = prepareNewPasswordEmail(customer,newPassword);
+        sendEmail(smm);
+    }
+
+    protected SimpleMailMessage prepareNewPasswordEmail(Customer customer, String newPassword){
+
+        SimpleMailMessage smm = new SimpleMailMessage();
+
+        smm.setTo(customer.getEmail());
+        smm.setFrom(emailSender);
+        smm.setSubject("Solicitação de nova senha");
+        smm.setSentDate(new Date(System.currentTimeMillis()));
+        smm.setText("Nova senha: " + newPassword);
+
+        return smm;
     }
 }
