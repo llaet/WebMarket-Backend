@@ -20,12 +20,12 @@
  - H2 database
  - JUnit
  
-######How to clone the project
+###### How to clone the project
 	git clone https://github.com/llaet/ErrorLog-API
 
-######How to run the project with Maven
+###### How to run the project with Maven
 	cd WebMarket-Backend
-  mvn run
+  	mvn run
 	
 ###### What is an API?
  - [What is? - en](https://www.redhat.com/en/topics/api/what-are-application-programming-interfaces)
