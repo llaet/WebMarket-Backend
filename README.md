@@ -2,7 +2,7 @@
 
 ## A web market API project, based on e-commerce platform patterns. Backend with API Rest, JWT token access and SQL queries. 
 
-###### Technologies
+### Technologies
 
  - Java 1.8
  - Git 2.9.0
