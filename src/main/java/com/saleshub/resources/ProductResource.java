@@ -31,12 +31,12 @@ public class ProductResource {
 	@GetMapping
 	public ResponseEntity<Page<ProductDTO>> findAllWithPageInfo(
 			@RequestParam(value="nome", defaultValue = "") String name,
-			@RequestParam(value="categorias", defaultValue = "") String categories,
+			@RequestParam(value="categorias", defaultValue = "1,2,3,4,5,6,7") String categories,
 			@RequestParam(value="page", defaultValue = "0") Integer page, 
 			@RequestParam(value="linesPerPage", defaultValue = "24") Integer linesPerPage, 
 			@RequestParam(value="orderBy", defaultValue = "name") String orderBy, 
 			@RequestParam(value="direction", defaultValue = "ASC") String direction){
-		
+
 		String decodedName = URL.decodeParam(name);
 		
 		List<Integer> ids = URL.decodeIntList(categories);
