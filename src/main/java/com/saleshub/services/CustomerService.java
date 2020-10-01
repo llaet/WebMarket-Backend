@@ -1,5 +1,6 @@
 package com.saleshub.services;
 
+import java.net.URI;
 import java.util.List;
 
 import com.saleshub.config.security.SecurityConfig;
@@ -22,15 +23,17 @@ import com.saleshub.domain.enums.ClientType;
 import com.saleshub.repositories.CustomerRepository;
 import com.saleshub.services.exceptions.DataIntegrityException;
 import com.saleshub.services.exceptions.ObjectNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.naming.AuthenticationException;
 
 @Service
 public class CustomerService {
 
 	@Autowired
 	private CustomerRepository repository;
-	
+	@Autowired
+	private S3Service s3Service;
+
 	public Customer create(Customer customer) {
 		customer.setId(null);
 		return this.repository.saveAndFlush(customer);
@@ -111,5 +114,9 @@ public class CustomerService {
 		customer.getPhones().add(customerNewDTO.getPhone3());
 		
 		return customer;
+	}
+
+	public URI uploadProfilePicture(MultipartFile multipartFile){
+		return this.s3Service.uploadFile(multipartFile);
 	}
 }
