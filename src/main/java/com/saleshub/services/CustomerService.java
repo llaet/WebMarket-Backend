@@ -1,5 +1,6 @@
 package com.saleshub.services;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import com.saleshub.config.security.UserSpringSecurity;
 import com.saleshub.domain.enums.CustomerProfile;
 import com.saleshub.services.exceptions.AuthorizationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +27,6 @@ import com.saleshub.services.exceptions.DataIntegrityException;
 import com.saleshub.services.exceptions.ObjectNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @Service
 public class CustomerService {
 
@@ -33,6 +34,10 @@ public class CustomerService {
 	private CustomerRepository repository;
 	@Autowired
 	private S3Service s3Service;
+	@Autowired
+	private ImageService imageService;
+	@Value("${image.prefix.customer.profile}")
+	private String customerProfilePrefix;
 
 	public Customer create(Customer customer) {
 		customer.setId(null);
@@ -124,13 +129,14 @@ public class CustomerService {
 			throw new AuthorizationException("Acesso negado");
 		}
 
-		URI uri = this.s3Service.uploadFile(multipartFile);
+		BufferedImage jpgImage = this.imageService.getJPEGImageFromFile(multipartFile);
 
-		int authenticatedUserId = authenticatedUser.getId();
-		Customer customer = this.findById(authenticatedUserId);
-		customer.setImageURL(uri.toString());
-		update(customer, authenticatedUserId);
+		String customerProfilePrefix =
+				this.customerProfilePrefix + authenticatedUser.getId() + ".jpg";
 
-		return uri;
+		return this.s3Service.uploadFile(
+				this.imageService.getInputStream(jpgImage, "jpg"),
+				customerProfilePrefix,
+				"image");
 	}
 }
