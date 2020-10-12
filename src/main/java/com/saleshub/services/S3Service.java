@@ -2,6 +2,7 @@ package com.saleshub.services;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.saleshub.services.exceptions.FileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class S3Service {
 
             return uploadFile(inputStream,fileName,contentType);
         } catch (IOException ioe) {
-            throw new RuntimeException("URL to URI conversion error");
+            throw new FileException("URL to URI conversion error");
         }
     }
 
@@ -48,8 +49,9 @@ public class S3Service {
             return  this.s3Client.getUrl(this.bucketName,fileName).toURI();
 
         } catch (URISyntaxException use) {
-               throw new RuntimeException("URL to URI conversion error");
+               throw new FileException("URL to URI conversion error");
             }
     }
 
 }
+
