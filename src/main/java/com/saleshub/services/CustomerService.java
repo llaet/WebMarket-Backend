@@ -117,6 +117,20 @@ public class CustomerService {
 	}
 
 	public URI uploadProfilePicture(MultipartFile multipartFile){
-		return this.s3Service.uploadFile(multipartFile);
+
+		UserSpringSecurity authenticatedUser = UserService.userAuthenticated();
+
+		if(authenticatedUser == null){
+			throw new AuthorizationException("Acesso negado");
+		}
+
+		URI uri = this.s3Service.uploadFile(multipartFile);
+
+		int authenticatedUserId = authenticatedUser.getId();
+		Customer customer = this.findById(authenticatedUserId);
+		customer.setImageURL(uri.toString());
+		update(customer, authenticatedUserId);
+
+		return uri;
 	}
 }
