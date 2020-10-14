@@ -3,6 +3,7 @@ package com.saleshub.services;
 import com.saleshub.services.exceptions.FileException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.entity.ContentType;
+import org.imgscalr.Scalr;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,5 +61,20 @@ public class ImageService {
         } catch (IOException ioe) {
             throw new FileException("Erro ao ler arquivo");
         }
+    }
+
+    public BufferedImage cropImage(BufferedImage image){
+        int minImageSideSize = (image.getHeight() <= image.getWidth()) ? image.getHeight() : image.getWidth();
+
+        return Scalr.crop(
+                image,
+                (image.getWidth() / 2) - minImageSideSize / 2,
+                (image.getHeight() / 2) - minImageSideSize / 2,
+                minImageSideSize,
+                minImageSideSize);
+    }
+
+    public BufferedImage resizeImage(BufferedImage image, int size){
+        return Scalr.resize(image, Scalr.Method.ULTRA_QUALITY, size);
     }
 }

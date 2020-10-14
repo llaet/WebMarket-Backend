@@ -38,6 +38,8 @@ public class CustomerService {
 	private ImageService imageService;
 	@Value("${image.prefix.customer.profile}")
 	private String customerProfilePrefix;
+	@Value("${image.profile.size}")
+	private Integer profileImageSize;
 
 	public Customer create(Customer customer) {
 		customer.setId(null);
@@ -129,14 +131,24 @@ public class CustomerService {
 			throw new AuthorizationException("Acesso negado");
 		}
 
-		BufferedImage jpgImage = this.imageService.getJPEGImageFromFile(multipartFile);
-
 		String customerProfilePrefix =
 				this.customerProfilePrefix + authenticatedUser.getId() + ".jpg";
 
+		BufferedImage image = prepareProfileImageToBeUploaded(multipartFile);
+
 		return this.s3Service.uploadFile(
-				this.imageService.getInputStream(jpgImage, "jpg"),
+				this.imageService.getInputStream(image, "jpg"),
 				customerProfilePrefix,
 				"image");
+	}
+
+	private BufferedImage prepareProfileImageToBeUploaded(MultipartFile multipartFile){
+		BufferedImage jpgImage = this.imageService.getJPEGImageFromFile(multipartFile);
+
+		BufferedImage cropedImage = this.imageService.cropImage(jpgImage);
+
+		BufferedImage resizedImage = this.imageService.resizeImage(cropedImage, profileImageSize);
+
+		return resizedImage;
 	}
 }
