@@ -2,7 +2,6 @@ package com.saleshub.services;
 
 import com.saleshub.services.exceptions.FileException;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.http.entity.ContentType;
 import org.imgscalr.Scalr;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
