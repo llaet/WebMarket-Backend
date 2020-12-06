@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +71,12 @@ public class CustomerResource {
 	@GetMapping("/{id}")
 	public ResponseEntity<Customer> findById(@PathVariable("id") Integer id){
 		return ResponseEntity.ok(this.service.findById(id));
+	}
+
+	@GetMapping("/email")
+	public ResponseEntity<Customer> findByEmail(@RequestParam(value = "email") String email){
+		Customer customer = this.service.findByAuthenticatedUserEmail(email);
+		return ResponseEntity.ok(customer);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")

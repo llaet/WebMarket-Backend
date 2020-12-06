@@ -83,8 +83,27 @@ public class CustomerService {
 				.orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado. Id: " + id));
 	}
 
-	public Customer findByEmail(String email) {
+	public Customer findByEmail(String email){
 		return this.repository.findByEmail(email);
+	}
+
+	public Customer findByAuthenticatedUserEmail(String email) {
+
+		UserSpringSecurity authenticatedUser = UserService.userAuthenticated();
+
+		if(authenticatedUser == null ||
+				!authenticatedUser.hasRole(CustomerProfile.ADMIN) && !email.equals(authenticatedUser.getUsername())){
+			throw new AuthorizationException("Acesso negado");
+		}
+
+		Customer customer = this.repository.findByEmail(email);
+
+		if(customer == null){
+			throw new ObjectNotFoundException("Cliente não encontrado. Id: " + authenticatedUser.getId() +
+					", Tipo: " + Customer.class.getName());
+		}
+
+		return customer;
 	}
 
 	public List<Customer> findAll() {
