@@ -19,7 +19,7 @@ public class StateService {
         List<State> states = this.repository.findAllByOrderByName();
 
         //returns a DTO list of states
-        return states.stream().map(state -> new StateDTO(state.getName(), state.getCities()))
+        return states.stream().map(state -> new StateDTO(state.getId(), state.getName()))
                 .collect(Collectors.toList());
     }
 }

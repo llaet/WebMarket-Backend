@@ -10,20 +10,20 @@ public class StateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer id;
     private String name;
-    private List<City> cities = new ArrayList<>();
 
-    public StateDTO(String name, List<City> cities){
+    public StateDTO(Integer id, String name){
+        this.id = id;
         this.name = name;
-        this.cities = cities;
     }
 
-    public List<City> getCities() {
-        return cities;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCities(List<City> cities) {
-        this.cities = cities;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

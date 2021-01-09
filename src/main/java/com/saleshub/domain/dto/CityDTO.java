@@ -1,20 +1,25 @@
 package com.saleshub.domain.dto;
 
-import com.saleshub.domain.State;
-
 import java.io.Serializable;
-import java.util.List;
 
 public class CityDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer id;
     private String name;
-    private State state;
 
-    public CityDTO(String name, State state) {
+    public CityDTO(Integer id, String name) {
+        this.id = id;
         this.name = name;
-        this.state = state;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -23,13 +28,5 @@ public class CityDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
     }
 }

@@ -15,11 +15,10 @@ public class CityService {
     @Autowired
     private CityRepository repository;
 
-    public List<CityDTO> findAll(){
-        List<City> cities = this.repository.findAll();
-
+    public List<CityDTO> findByStateId(Integer stateId){
+        List<City> cities = this.repository.findByStateId(stateId);
         //return a list of cities DTO
-        return cities.stream().map(city -> new CityDTO(city.getName(), city.getState()))
+        return cities.stream().map(city -> new CityDTO(city.getId(), city.getName()))
                 .collect(Collectors.toList());
     }
 }
