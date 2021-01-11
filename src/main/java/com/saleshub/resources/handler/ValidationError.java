@@ -10,8 +10,8 @@ public class ValidationError extends ErrorMessageConstructor {
 	
 	private List<FieldMessage> errors = new ArrayList<>();
 
-	public ValidationError(Integer status, String message, LocalDateTime timeStamp) {
-		super(status, message, timeStamp);
+	public ValidationError(Integer status, String message, LocalDateTime timeStamp,  String error, String path) {
+		super(status, message, timeStamp,  error, path);
 	}
 
 	public List<FieldMessage> getErrors() {

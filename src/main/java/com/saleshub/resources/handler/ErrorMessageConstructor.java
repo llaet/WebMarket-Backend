@@ -8,17 +8,36 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class ErrorMessageConstructor implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer status;
+	private String error;
 	private String message;
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private LocalDateTime timeStamp;
-	
-	public ErrorMessageConstructor(Integer status, String message, LocalDateTime timeStamp) {
-		super();
+	private String path;
+
+	public ErrorMessageConstructor(Integer status, String message, LocalDateTime timeStamp,  String error, String path) {
 		this.status = status;
+		this.error = error;
 		this.message = message;
 		this.timeStamp = timeStamp;
+		this.path = path;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	public Integer getStatus() {
